@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Management</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input, button {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    input {
+      flex: 1;
+    }
+
+    button {
+      cursor: pointer;
+      background: #4a90e2;
+      color: white;
+      border: none;
+    }
+
+    button.remove {
+      background: #e74c3c;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    li span {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>📚 Library Management</h1>
+  <div class="container">
+
+    <!-- Search -->
+    <div class="search-box">
+      <input type="text" id="search" placeholder="Search book by title...">
+    </div>
+
+    <!-- Add Book -->
+    <div class="search-box">
+      <input type="text" id="book-title" placeholder="Enter book title">
+      <button id="add-book">Add Book</button>
+    </div>
+
+    <!-- Book List -->
+    <ul id="book-list"></ul>
+  </div>
+
+  <script>
+    // Initial books
+    let books = ["The Alchemist", "Harry Potter", "The Great Gatsby"];
+
+    const bookList = document.getElementById("book-list");
+    const searchInput = document.getElementById("search");
+    const bookTitleInput = document.getElementById("book-title");
+    const addBookBtn = document.getElementById("add-book");
+
+    // Function to render books
+    function renderBooks(filter = "") {
+      bookList.innerHTML = "";
+      books
+        .filter(book => book.toLowerCase().includes(filter.toLowerCase()))
+        .forEach((book, index) => {
+          const li = document.createElement("li");
+          li.innerHTML = `
+            <span>${book}</span>
+            <button class="remove" onclick="removeBook(${index})">Remove</button>
+          `;
+          bookList.appendChild(li);
+        });
+    }
+
+    // Add book
+    addBookBtn.addEventListener("click", () => {
+      const title = bookTitleInput.value.trim();
+      if (title) {
+        books.push(title);
+        bookTitleInput.value = "";
+        renderBooks(searchInput.value);
+      } else {
+        alert("Please enter a book title.");
+      }
+    });
+
+    // Search books
+    searchInput.addEventListener("input", () => {
+      renderBooks(searchInput.value);
+    });
+
+    // Remove book
+    function removeBook(index) {
+      books.splice(index, 1);
+      renderBooks(searchInput.value);
+    }
+
+    // Initial render
+    renderBooks();
+  </script>
+</body>
+</html>
